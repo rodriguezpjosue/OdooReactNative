@@ -12,6 +12,9 @@ class Odoo {
     this.context = config.context;
   }
   authenticate(cb) {
+    delete this.session_id;
+    delete this.context;
+    console.log(this);
     var body = JSON.stringify({
       params: {
         db: this.database,
@@ -28,7 +31,7 @@ class Odoo {
       },
       data: body,
       withCredentials: false,
-      baseURL: this.host + ":" + this.port,
+      baseURL: "http://" + this.host + ":" + this.port,
       url: "/web/session/authenticate",
     };
     return axios(requestConfig).then(

@@ -11,6 +11,7 @@ const SettingsForm = ({ navigation }) => {
     const [resultMessage, setResultMessage] = useState('');
     const [isHostFilled, setIsHostFilled] = useState(false);
     const [isPortFilled, setIsPortFilled] = useState(false);
+    const [isDatabaseFilled, setIsDatabaseFilled] = useState(false);
 
     const handlePortChange = (value) => {
         setIsPortFilled(!!value);
@@ -20,11 +21,16 @@ const SettingsForm = ({ navigation }) => {
         setIsHostFilled(!!value);
     };
 
+    const handleDatabaseChange = (value) => {
+        setIsDatabaseFilled(!!value);
+    };
+
     const onSaveSettings = (data) => {
         setResultMessage('');
-        if (data.port && data.host) {
+        if (data.port && data.host && data.database) {
             AsyncStorage.setItem('configHost', data.host);
             AsyncStorage.setItem('configPort', data.port);
+            AsyncStorage.setItem('configDatabase', data.database);
             setResultMessage('Settings are saved.');
         }
     }
@@ -38,6 +44,10 @@ const SettingsForm = ({ navigation }) => {
             await AsyncStorage.getItem('configPort')
                 .then(
                     value => setValue("port", value)
+                );
+            await AsyncStorage.getItem('configDatabase')
+                .then(
+                    value => setValue("database", value)
                 );
         }
         getSettings();
@@ -88,11 +98,31 @@ const SettingsForm = ({ navigation }) => {
                     rules={{ required: true }}
                 />
 
+                <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={styles.input}
+                            onBlur={onBlur}
+                            onChangeText={
+                                value => {
+                                    onChange(value);
+                                    handleDatabaseChange(value);
+                                }
+                            }
+                            placeholder="Database"
+                            value={value}
+                        />
+                    )}
+                    name="database"
+                    rules={{ required: true }}
+                />
+
                 <Button 
                     style={styles.formButton}
                     title="Save" 
                     onPress={handleSubmit(onSaveSettings)} 
-                    disabled={!isHostFilled || !isPortFilled}
+                    disabled={!isHostFilled || !isPortFilled || !isDatabaseFilled}
                 />
 
                 <Button

@@ -23,8 +23,19 @@ const Styles = StyleSheet.create({
     },
     formButton: {
         backgroundColor: 'black',
-        padding: 8,
+        padding: 10,
         marginBottom: 10,
+        color: 'white',
+        textTransform: 'uppercase',
+        textAlign: 'center',
+    },
+    formButtonDisabled: {
+        backgroundColor: 'grey',
+        padding: 10,
+        marginBottom: 10,
+        color: 'black',
+        textTransform: 'uppercase',
+        textAlign: 'center',
     }
 });
 

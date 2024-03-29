@@ -12,9 +12,6 @@ class Odoo {
     this.context = config.context;
   }
   authenticate(cb) {
-    delete this.session_id;
-    delete this.context;
-    console.log(this);
     var body = JSON.stringify({
       params: {
         db: this.database,

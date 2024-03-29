@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../assets/Styles';
 
@@ -118,12 +118,15 @@ const SettingsForm = ({ navigation }) => {
                     rules={{ required: true }}
                 />
 
-                <Button 
-                    style={styles.formButton}
-                    title="Save" 
+                <TouchableOpacity
                     onPress={handleSubmit(onSaveSettings)} 
                     disabled={!isHostFilled || !isPortFilled || !isDatabaseFilled}
-                />
+                    >
+                    <Text style={styles.formButton}>
+                        Save
+                    </Text>
+                </TouchableOpacity>
+                
 
                 <Button
                     style={styles.formButton}

@@ -8,10 +8,7 @@ const Dashboard = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.centerPage}>
-            <Button
-                title="Go to Login"
-                onPress={() => navigation.navigate('Login')}
-            />
+            <Text>Bienvenido</Text>
         </SafeAreaView>
     )
 }

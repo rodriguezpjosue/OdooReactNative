@@ -37,6 +37,8 @@ class Odoo {
           cb(response.data.error, null);
         } else {
           this.context = response.data.result.user_context;
+          var cookies = (response.request.responseHeaders["Set-Cookie"]).split("; ");
+          this.session_id = cookies[0].replace("session_id=", "");
           cb(null, response.data.result);
         }
       },

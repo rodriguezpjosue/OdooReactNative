@@ -21,6 +21,11 @@ const Styles = StyleSheet.create({
         color: 'red',
         marginBottom: 10,
     },
+    formButton: {
+        backgroundColor: 'black',
+        padding: 8,
+        marginBottom: 10,
+    }
 });
 
 export default Styles;

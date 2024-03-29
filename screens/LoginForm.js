@@ -38,14 +38,13 @@ function LoginForm({ navigation }) {
         
         const loginCallback = (error, result) => {
             if (error === null){
-                console.log(result);
                 navigation.navigate('Dashboard');
             } else {
                 reset(control);
+                //console.log(result);
                 setIsUsernameFilled(false);
                 setIsPasswordFilled(false);
                 //setValue('username','popo');
-                console.error(error.data.message);
                 setLoginMessage(error.data.message);
             }
         }

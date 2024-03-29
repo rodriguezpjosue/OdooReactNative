@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from 'react-native';
 import Odoo from '../services/OdooServices'
+import styles from '../assets/Styles';
 
-
-function LoginForm() {
+function LoginForm({ navigation }) {
     const [loginMessage, setLoginMessage] = useState('');
     const { register, setValue, getValues, handleSubmit, control, reset, formState: { errors } } = useForm();
 
@@ -39,6 +39,7 @@ function LoginForm() {
         const loginCallback = (error, result) => {
             if (error === null){
                 console.log(result);
+                navigation.navigate('Dashboard');
             } else {
                 reset(control);
                 setIsUsernameFilled(false);
@@ -109,32 +110,14 @@ function LoginForm() {
             disabled={!isUsernameFilled || !isPasswordFilled}
         />
 
+        <Button
+            title="Go to Settings"
+            onPress={() => navigation.navigate('Settings')}
+        />
+
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-    centerPage:{
-        flex: 1, 
-        justifyContent: "center", 
-        alignItems: "center",
-    },
-    container: {
-        padding: 16,
-        alignSelf: 'stretch',
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        padding: 8,
-    },
-    errorText: {
-        color: 'red',
-        marginBottom: 10,
-    },
-});
 
 export default LoginForm;

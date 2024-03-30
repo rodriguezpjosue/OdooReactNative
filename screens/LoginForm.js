@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { useIsFocused } from "@react-navigation/native";
 import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from 'react-native';
-import Odoo from '../services/OdooServices'
+import Odoo from '../services/OdooServices';
+import session from '../services/checkSession';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../assets/Styles';
 
@@ -13,6 +15,8 @@ function LoginForm({ navigation }) {
     const [isUsernameFilled, setIsUsernameFilled] = useState(false);
     const [isPasswordFilled, setIsPasswordFilled] = useState(false);
 
+    const isFocused = useIsFocused();
+
     const handleUsernameChange = (value) => {
         setIsUsernameFilled(!!value);
     };
@@ -20,6 +24,14 @@ function LoginForm({ navigation }) {
     const handlePasswordChange = (value) => {
         setIsPasswordFilled(!!value);
     };
+
+    useEffect(() => {
+      if ( session === null ){
+
+      } else {
+        navigation.navigate('Dashboard');
+      }
+    },[navigation, isFocused]);
 
     const onLogin = async (data) => {
         setLoginMessage('');
@@ -29,8 +41,6 @@ function LoginForm({ navigation }) {
         data.database = await AsyncStorage.getItem('configDatabase');
 
         if (data.host && data.port && data.database) {
-          //data.host = "http://app-test.sgsdominion-global.com";
-          //data.database = "co-lr-test";
 
           const odoo = new Odoo({
               host: data.host,

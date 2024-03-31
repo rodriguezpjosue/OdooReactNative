@@ -1,39 +1,34 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import session from './services/checkSession';
-import LoginScreen from './screens/LoginForm';
-import SettingsScreen from './screens/SettingsForm';
-import DashboardScreen from './screens/DashboardScreen';
+import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
+import { Session, Logout } from './services/Session';
+import LoginStack from './screens/LoginStack';
 
 function App() {
 
-  const [initialRouteName, setInitialRouteName] = useState('Login');
-  const Stack = createNativeStackNavigator();
+  const Drawer = createDrawerNavigator();
 
-  useEffect(() => {
-    if (session === null) {
-      setInitialRouteName('Login')
-    } else {
-      setInitialRouteName('Dashboard')
-    }
-  },[session]);
+  const session = Session();
+
+  const NavigationDrawer = () => {
+    <Drawer.Navigator
+            drawerType="front"
+            initialRouteName="Dashboard"
+            drawerContentOptions={{
+              activeTintColor: '#e91e63',
+              itemStyle: { marginVertical: 10 },
+            }}
+      >
+        <DrawerItem
+          label="Help"
+          onPress={() => Logout}
+        />
+    </Drawer.Navigator>
+  }
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={ initialRouteName }>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen 
-          name="Dashboard" 
-          component={DashboardScreen} 
-          options={{
-            headerLeft: ()=> null,
-            headerBackVisible: false,
-          }}
-        />
-      </Stack.Navigator>
+      {session ? <NavigationDrawer/> : <LoginStack/>}
     </NavigationContainer>
   );
 }

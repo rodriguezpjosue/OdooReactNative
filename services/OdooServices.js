@@ -47,6 +47,27 @@ class Odoo {
       }
     );
   }
+  logout() {
+    if (this.session_id) {
+      var requestConfig = {
+        method: "GET",
+        headers: {
+          "cookie": "session_id=" + this.session_id + ";",
+        },
+        withCredentials: false,
+        baseURL: "http://" + this.host + ":" + this.port,
+        url: "/web/session/logout",
+      };
+      return axios(requestConfig).then(
+        (response) => {
+          this.session_id = null;
+        },
+        (error) => {
+          this.session_id = null;
+        }
+      );
+    }
+  }
   search(model, params, callback) {
     this._request(
       "/web/dataset/call_kw",

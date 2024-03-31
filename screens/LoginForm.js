@@ -4,7 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useIsFocused } from "@react-navigation/native";
 import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from 'react-native';
 import Odoo from '../services/OdooServices';
-import session from '../services/checkSession';
+import { Session } from '../services/Session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../assets/Styles';
 
@@ -17,6 +17,8 @@ function LoginForm({ navigation }) {
 
     const isFocused = useIsFocused();
 
+    const session = Session();
+
     const handleUsernameChange = (value) => {
         setIsUsernameFilled(!!value);
     };
@@ -26,8 +28,7 @@ function LoginForm({ navigation }) {
     };
 
     useEffect(() => {
-      if ( session === null ){
-
+      if ( session === null || session === undefined ){
       } else {
         navigation.navigate('Dashboard');
       }

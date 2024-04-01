@@ -13,10 +13,12 @@ function App() {
         .then(
             (response) => {
                 const session = JSON.parse(response);
-                if ( session.session_id === null || session.session_id === undefined ) {
-                    setLogin(false);
-                } else {
-                    setLogin(true);
+                if ( session ){
+                  if ( session.session_id === null || session.session_id === undefined ) {
+                      setLogin(false);
+                  } else {
+                      setLogin(true);
+                  }
                 }
             }
         )
@@ -30,7 +32,8 @@ function App() {
 
   return (
     <NavigationContainer>
-      {isLogin ? <DrawerNavigator/> : <LoginStack/>}
+      {/*isLogin ? <DrawerNavigator/> : <LoginStack/>*/}
+      <DrawerNavigator isLogin={isLogin}/>
     </NavigationContainer>
   );
 }

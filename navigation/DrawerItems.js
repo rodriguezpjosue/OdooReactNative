@@ -27,9 +27,9 @@ const DrawerMenu = (props) => {
                     return <CustomDrawerItem 
                               key={index} 
                               label={menu.label}
-                              onPress={() => props.navigation.navigate(menu.name)} 
-                              //onPress={menu.onPress}
-                              //onPress={menu.isScreen ? undefined : menu.onPress}
+                              onPress={
+                                menu.isScreen ? () => props.navigation.navigate(menu.name): () => menu.onPress(props)
+                              } 
                               //screen={menu.isScreen ? menu.screen : undefined} // Pass screen only if isScreen is true
                             />
                 }

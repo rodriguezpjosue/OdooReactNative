@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useIsFocused } from "@react-navigation/native";
-import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, SafeAreaView, BackHandler } from 'react-native';
 import Odoo from '../services/OdooServices';
 import { getSession, setSession } from '../services/Session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,6 +10,7 @@ import styles from '../assets/Styles';
 
 function LoginForm({ navigation }) {
     const [loginMessage, setLoginMessage] = useState('');
+    const [isLogin, setLogin] = useState(false);
     const { register, setValue, getValues, handleSubmit, control, reset, formState: { errors } } = useForm();
 
     const [isUsernameFilled, setIsUsernameFilled] = useState(false);
@@ -28,25 +29,26 @@ function LoginForm({ navigation }) {
     };
 
     useEffect(() => {
-      getSession()
-          .then(
-              (response) => {
-                  const session = JSON.parse(response);
-                  if ( session.session_id === null || session.session_id === undefined ) {
-                        console.info('Not login');
-                      } else {
-                        navigation.navigate('Dashboard');
-                      }
-              }
-          )
-    },[navigation, isFocused]);
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+      return () => backHandler.remove()
+    }, []);
 
     useEffect(() => {
-      if ( session.session_id === null || session.session_id  === undefined ){
-      } else {
-        navigation.navigate('Dashboard');
-      }
-    },[navigation, isFocused]);
+      session
+          .then(
+              (response) => {
+                  const sessionData = JSON.parse(response);
+                  if ( sessionData ) {
+                    if ( sessionData.session_id === null || sessionData.session_id === undefined ) {
+                      console.info('Not login');
+                    } else {
+                      console.info('Is login');
+                      navigation.navigate('Dashboard');
+                    }
+                  }
+              }
+          )
+    },[navigation, isFocused, isLogin]);
 
     const onLogin = async (data) => {
         setLoginMessage('');
@@ -70,7 +72,7 @@ function LoginForm({ navigation }) {
           const loginCallback = (error, result) => {
               if (error === null){
                   setSession(result.session);
-                  navigation.navigate('Dashboard');
+                  setLogin(true);
               } else {
                   reset(control);
                   setIsUsernameFilled(false);

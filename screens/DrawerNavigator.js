@@ -3,14 +3,14 @@ import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 import DrawerMenu from '../navigation/DrawerItems';
 import DashboardScreen from './DashboardScreen';
 import SettingsScreen from './SettingsForm';
+import LoginScreen from './LoginForm';
 
-const NavigationDrawer = () => {
-    console.log('DrawerNavigator');
+const NavigationDrawer = (props) => {
     const Drawer = createDrawerNavigator();
     return (
         <Drawer.Navigator
             drawerType="front"
-            initialRouteName="Dashboard"
+            initialRouteName={props.isLogin ? "Dashboard" : "Login"}
             drawerContent={(props) => <DrawerMenu{...props} />}
             screenOptions={{
               activeTintColor: '#e91e63',
@@ -19,6 +19,15 @@ const NavigationDrawer = () => {
         >
             <Drawer.Screen name="Dashboard" component={ DashboardScreen } />
             <Drawer.Screen name="Settings" component={ SettingsScreen } />
+            <Drawer.Screen 
+                name="Login" 
+                component={ LoginScreen } 
+                options={{
+                    headerLeft: ()=> null,
+                    headerBackVisible: false,
+                    swipeEnabled: false,
+                }}
+                />
         </Drawer.Navigator>
     )
   }

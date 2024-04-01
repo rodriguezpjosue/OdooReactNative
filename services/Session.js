@@ -6,8 +6,7 @@ export const getSession = () => {
 }
 
 export const Logout = () => {
-    killSession();
-    return Odoo.logout;
+    return killSession();
 }
 
 export const setSession = (sessionData) => {

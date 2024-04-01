@@ -9,6 +9,7 @@ const Stack = createNativeStackNavigator();
 
 const LoginStack = () => {
     const [initialRouteName, setInitialRouteName] = useState('Login');
+    const [isLogin, setLogin] = useState(false);
 
     const session = getSession();
     
@@ -18,11 +19,14 @@ const LoginStack = () => {
             .then(
                 (response) => {
                     const session = JSON.parse(response);
-                    if ( session.session_id === null || session.session_id === undefined ) {
-                        setInitialRouteName('Login');
-                    } else {
+                    if ( session ){
+                        if ( session.session_id === null || session.session_id === undefined ) {
+                            setInitialRouteName('Login');
+                            setLogin(true);
+                        }
+                    } /*else {
                         setInitialRouteName('Dashboard');
-                    }
+                    }*/
                 }
             )
             .catch(
@@ -38,13 +42,21 @@ const LoginStack = () => {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen 
+                        name="Dashboard" 
+                        component={DashboardScreen} 
+                        options={{
+                            headerLeft: ()=> null,
+                            headerBackVisible: false,
+                        }}
+            />
+            {/*<Stack.Screen 
                 name="Dashboard" 
                 component={DashboardScreen} 
                 options={{
                 headerLeft: ()=> null,
                 headerBackVisible: false,
                 }}
-            />
+            />*/}
         </Stack.Navigator>
     )
 }

@@ -22,10 +22,8 @@ const Dashboard = ({ navigation }) => {
                     const sessionData = JSON.parse(response);
                     if ( !sessionData ) {
                         setLogin(false);
-                        console.log('Not Session');
                         navigation.navigate('Login');
                     } else {
-                        console.log('Have Session');
                         setLogin(true);
                     }
                 }

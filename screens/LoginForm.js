@@ -42,7 +42,6 @@ function LoginForm({ navigation }) {
                     if ( sessionData.session_id === null || sessionData.session_id === undefined ) {
                       console.info('Not login');
                     } else {
-                      console.info('Is login');
                       navigation.navigate('Dashboard');
                     }
                   }

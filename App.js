@@ -1,34 +1,36 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
-import { Session, Logout } from './services/Session';
+import { getSession, Logout } from './services/Session';
+import { useState, useEffect } from 'react';
+import DrawerNavigator from './screens/DrawerNavigator';
 import LoginStack from './screens/LoginStack';
 
 function App() {
-
-  const Drawer = createDrawerNavigator();
-
-  const session = Session();
-
-  const NavigationDrawer = () => {
-    <Drawer.Navigator
-            drawerType="front"
-            initialRouteName="Dashboard"
-            drawerContentOptions={{
-              activeTintColor: '#e91e63',
-              itemStyle: { marginVertical: 10 },
-            }}
-      >
-        <DrawerItem
-          label="Help"
-          onPress={() => Logout}
-        />
-    </Drawer.Navigator>
-  }
+  const [isLogin, setLogin] = useState(false);
+  const session = getSession();
+  useEffect(() => {
+    session
+        .then(
+            (response) => {
+                const session = JSON.parse(response);
+                if ( session.session_id === null || session.session_id === undefined ) {
+                    setLogin(false);
+                } else {
+                    setLogin(true);
+                }
+            }
+        )
+        .catch(
+            (response) => {
+                console.log('Error: ' + response);
+                killSession();
+            }
+        )
+    },[isLogin]);
 
   return (
     <NavigationContainer>
-      {session ? <NavigationDrawer/> : <LoginStack/>}
+      {isLogin ? <DrawerNavigator/> : <LoginStack/>}
     </NavigationContainer>
   );
 }

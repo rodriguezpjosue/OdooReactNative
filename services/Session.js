@@ -1,19 +1,21 @@
 import Odoo from './OdooServices'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const Session = () => {
-    return Odoo.session
+export const getSession = () => {
+    return AsyncStorage.getItem('configSession');
 }
 
 export const Logout = () => {
+    killSession();
     return Odoo.logout;
 }
 
-export const SetSession = (sessionData) => {
-    AsyncStorage.setItem('sessionData', JSON.stringify(sessionData));
+export const setSession = (sessionData) => {
+    AsyncStorage.setItem('configSession', JSON.stringify(sessionData));
     return sessionData;
 }
 
-export const killSession = (sessionId) => {
+export const killSession = () => {
+    AsyncStorage.removeItem('configSession');
     return;
 }

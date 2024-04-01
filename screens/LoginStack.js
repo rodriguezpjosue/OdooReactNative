@@ -3,22 +3,35 @@ import { useState, useEffect } from 'react';
 import LoginScreen from './LoginForm';
 import SettingsScreen from './SettingsForm';
 import DashboardScreen from './DashboardScreen';
-import { Session } from '../services/Session';
+import { getSession } from '../services/Session';
 
 const Stack = createNativeStackNavigator();
 
 const LoginStack = () => {
     const [initialRouteName, setInitialRouteName] = useState('Login');
 
-    const session = Session();
+    const session = getSession();
     
     useEffect(() => {
-        if (session === null || session === undefined) {
-            setInitialRouteName('Login');
-        } else {
-            setInitialRouteName('Dashboard')
-        }
-      },[session]);
+        console.info('LoginStack');
+        session
+            .then(
+                (response) => {
+                    const session = JSON.parse(response);
+                    if ( session.session_id === null || session.session_id === undefined ) {
+                        setInitialRouteName('Login');
+                    } else {
+                        setInitialRouteName('Dashboard');
+                    }
+                }
+            )
+            .catch(
+                (response) => {
+                    console.log('Error: ' + response);
+                    killSession();
+                }
+            )
+        },[session]);
 
     return (
         <Stack.Navigator initialRouteName={ initialRouteName }>

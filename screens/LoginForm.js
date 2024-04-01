@@ -4,7 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useIsFocused } from "@react-navigation/native";
 import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from 'react-native';
 import Odoo from '../services/OdooServices';
-import { Session } from '../services/Session';
+import { getSession, setSession } from '../services/Session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../assets/Styles';
 
@@ -17,7 +17,7 @@ function LoginForm({ navigation }) {
 
     const isFocused = useIsFocused();
 
-    const session = Session();
+    const session = getSession();
 
     const handleUsernameChange = (value) => {
         setIsUsernameFilled(!!value);
@@ -28,7 +28,21 @@ function LoginForm({ navigation }) {
     };
 
     useEffect(() => {
-      if ( session === null || session === undefined ){
+      getSession()
+          .then(
+              (response) => {
+                  const session = JSON.parse(response);
+                  if ( session.session_id === null || session.session_id === undefined ) {
+                        console.info('Not login');
+                      } else {
+                        navigation.navigate('Dashboard');
+                      }
+              }
+          )
+    },[navigation, isFocused]);
+
+    useEffect(() => {
+      if ( session.session_id === null || session.session_id  === undefined ){
       } else {
         navigation.navigate('Dashboard');
       }
@@ -55,10 +69,10 @@ function LoginForm({ navigation }) {
           
           const loginCallback = (error, result) => {
               if (error === null){
+                  setSession(result.session);
                   navigation.navigate('Dashboard');
               } else {
                   reset(control);
-                  //console.log(result);
                   setIsUsernameFilled(false);
                   setIsPasswordFilled(false);
                   //setValue('username','popo');
